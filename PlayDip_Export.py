@@ -6,32 +6,45 @@ Created on Thu Jul 24 09:49:26 2014
 """
 import sys
 import requests
-from urllib import urlopen
+import getpass
+import os.path
+# from urllib import urlopen
 from bs4 import BeautifulSoup
 
 def Main():
     
-    folderpath = 'D:\0r2754\wsg\Dip'
+    
+    username = raw_input('Enter your playdiplomacy.com name: ')
+    password = raw_input('Enter your playdiplomacy.com password: ')
+    #password = getpass.getpass('Enter your playdiplomacy.com password: ')
+    
+    GameID = raw_input('Game ID: ')
+    
+    
+    
+    folderpath = 'D:\\0r2754\wsg\Dip'
     
     #GameID = 84190
     #lURL = "http://www.playdiplomacy.com/game_history.php?game_id=" + str(GameID) + "&gdate=1&phase=B"
     
     #URL = 'http://www.playdiplomacy.com/game_history.php?game_id=84190&gdate=1&phase=B'
-        
+    
+
+    
     # Start a session so we can have persistant cookies
     session = requests.session()
-
+    
     # This is the form data that the page sends when logging in
     payload = {
         'page_act' :  '',
-        'username': 'WilliamSGodfrey',
-        'password': 'XXXXXXXX'
+        'username': username,
+        'password': password
     }
     
     # This logs in to the website
     session.post('http://www.playdiplomacy.com/login.php', data=payload)
 
-    request = session.get('http://www.playdiplomacy.com/game_history.php?game_id=84190&gdate=1&phase=O')
+    request = session.get('http://www.playdiplomacy.com/game_history.php?game_id=' + str(GameID) + '&gdate=1&phase=O')
     rawsoup = BeautifulSoup(request.text)
     rawsoup = rawsoup.find_all('td', class_='maphistory')
     rawsoup = str(rawsoup[0])
@@ -40,7 +53,7 @@ def Main():
     
     rawlist = rawsoup.splitlines()[1:-1]
 
-    #filepath = folderpath + '    
+    filepath = folderpath + '\\' + str(GameID) + '.txt'
     
     with open(filepath,'w') as outf:
         for idx, value in enumerate(rawlist):
