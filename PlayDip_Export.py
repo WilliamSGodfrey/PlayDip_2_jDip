@@ -71,7 +71,6 @@ def Main():
                     if 'FRANCE' in value or 'ENGLAND' in value or 'RUSSIA' in value or 'TURKEY' in value or 'ITALY' in value or 'AUSTRIA' in value or 'GERMANy' in value or 'gt;' in value:
                         next
                     else:
-                print value
                         outf.write(value + '\n')
                         
             if Turn == 3:
