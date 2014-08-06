@@ -25,7 +25,7 @@ def Main():
     payload = {
         'page_act' :  '',
         'username': 'WilliamSGodfrey',
-        'password': 'wsg1983X'
+        'password': 'XXXXXXXX'
     }
     
     # This logs in to the website
