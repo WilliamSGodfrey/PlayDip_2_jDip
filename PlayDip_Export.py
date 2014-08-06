@@ -4,10 +4,10 @@ Created on Thu Jul 24 09:49:26 2014
 
 @author: 0r2754
 """
-import sys
+#import sys
 import requests
 import getpass
-import os.path
+#import os.path
 # from urllib import urlopen
 from bs4 import BeautifulSoup
 
@@ -19,7 +19,7 @@ def Main():
     #password = getpass.getpass('Enter your playdiplomacy.com password: ')
     
     GameID = raw_input('Game ID: ')
-    
+    CurrentTurn = False
     
     
     folderpath = 'D:\\0r2754\wsg\Dip'
@@ -44,23 +44,36 @@ def Main():
     # This logs in to the website
     session.post('http://www.playdiplomacy.com/login.php', data=payload)
 
-    request = session.get('http://www.playdiplomacy.com/game_history.php?game_id=' + str(GameID) + '&gdate=1&phase=O')
-    rawsoup = BeautifulSoup(request.text)
-    rawsoup = rawsoup.find_all('td', class_='maphistory')
-    rawsoup = str(rawsoup[0])
-    rawsoup = rawsoup.replace('<b>','').replace('</b>','').replace('<br/>','\n').replace('-&','\n')
-    rawsoup = rawsoup.replace('to hold','H')
-    
-    rawlist = rawsoup.splitlines()[1:-1]
-
+    Turn = -1
     filepath = folderpath + '\\' + str(GameID) + '.txt'
-    
-    with open(filepath,'w') as outf:
-        for idx, value in enumerate(rawlist):
-            if 'FRANCE' in value or 'ENGLAND' in value or 'RUSSIA' in value or 'TURKEY' in value or 'ITALY' in value or 'AUSTRIA' in value or 'GERMANy' in value or 'gt;' in value:
-                next
+    with open(filepath,'a') as outf:
+        outf.write('GAME' + str(GameID)
+        
+        while CurrentTurn != True:
+            Turn = Turn + 1
+            if Turn % 2 == 0:
+                phase = ['O', 'R']
             else:
+                phase = ['O', 'R', 'B']
+        
+            for idx, value in enumerate(phase):
+                outf.write(str(1901 + Turn))
+                request = session.get('http://www.playdiplomacy.com/game_history.php?game_id=' + str(GameID) + '&gdate=' + str(Turn) + '&phase=' + value)
+                rawhtml = BeautifulSoup(request.text)
+                rawhtml = rawhtml.find_all('td', class_='maphistory')
+                rawhtml = str(rawhtml[0])
+                rawhtml = rawhtml.replace('<b>','').replace('</b>','').replace('<br/>','\n').replace('-&','\n')
+                rawhtml = rawhtml.replace('to hold','H')
+                
+                rawlist = rawhtml.splitlines()[1:-1]   
+              
+                for idx, value in enumerate(rawlist):
+                    if 'FRANCE' in value or 'ENGLAND' in value or 'RUSSIA' in value or 'TURKEY' in value or 'ITALY' in value or 'AUSTRIA' in value or 'GERMANy' in value or 'gt;' in value:
+                        next
+                    else:
                 print value
-                outf.write(value + '\n')
-
+                        outf.write(value + '\n')
+                        
+            if Turn == 3:
+                    CurrentTurn == True
 Main()
