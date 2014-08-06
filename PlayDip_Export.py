@@ -9,8 +9,6 @@ import requests
 from urllib import urlopen
 from bs4 import BeautifulSoup
 
-test test test
-
 def Main():
     
     folderpath = 'D:\0r2754\wsg\Dip'
@@ -42,7 +40,7 @@ def Main():
     
     rawlist = rawsoup.splitlines()[1:-1]
 
-    filepath = folderpath + '    
+    #filepath = folderpath + '    
     
     with open(filepath,'w') as outf:
         for idx, value in enumerate(rawlist):
